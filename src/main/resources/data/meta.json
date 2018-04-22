@@ -1,0 +1,206 @@
+{
+  "SO2": [
+    {
+      "hourAvg": 0,
+      "aqi": 0
+    },
+    {
+      "hourAvg": 150,
+      "aqi": 50
+    },
+    {
+      "hourAvg": 500,
+      "aqi": 100
+    },
+    {
+      "hourAvg": 650,
+      "aqi": 150
+    },
+    {
+      "hourAvg": 800,
+      "aqi": 200
+    },
+    {
+      "hourAvg": 1600,
+      "aqi": 300
+    },
+    {
+      "hourAvg": 2100,
+      "aqi": 400
+    },
+    {
+      "hourAvg": 2620,
+      "aqi": 500
+    }
+  ],
+  "NO2": [
+    {
+      "hourAvg": 0,
+      "aqi": 0
+    },
+    {
+      "hourAvg": 100,
+      "aqi": 50
+    },
+    {
+      "hourAvg": 200,
+      "aqi": 100
+    },
+    {
+      "hourAvg": 700,
+      "aqi": 150
+    },
+    {
+      "hourAvg": 1200,
+      "aqi": 200
+    },
+    {
+      "hourAvg": 2340,
+      "aqi": 300
+    },
+    {
+      "hourAvg": 3090,
+      "aqi": 400
+    },
+    {
+      "hourAvg": 3840,
+      "aqi": 500
+    }
+  ],
+  "PM10": [
+    {
+      "hourAvg": 0,
+      "aqi": 0
+    },
+    {
+      "hourAvg": 50,
+      "aqi": 50
+    },
+    {
+      "hourAvg": 150,
+      "aqi": 100
+    },
+    {
+      "hourAvg": 250,
+      "aqi": 150
+    },
+    {
+      "hourAvg": 350,
+      "aqi": 200
+    },
+    {
+      "hourAvg": 420,
+      "aqi": 300
+    },
+    {
+      "hourAvg": 500,
+      "aqi": 400
+    },
+    {
+      "hourAvg": 600,
+      "aqi": 500
+    }
+  ],
+  "CO": [
+    {
+      "hourAvg": 0,
+      "aqi": 0
+    },
+    {
+      "hourAvg": 5,
+      "aqi": 50
+    },
+    {
+      "hourAvg": 10,
+      "aqi": 100
+    },
+    {
+      "hourAvg": 35,
+      "aqi": 150
+    },
+    {
+      "hourAvg": 60,
+      "aqi": 200
+    },
+    {
+      "hourAvg": 90,
+      "aqi": 300
+    },
+    {
+      "hourAvg": 120,
+      "aqi": 400
+    },
+    {
+      "hourAvg": 150,
+      "aqi": 500
+    }
+  ],
+  "O3": [
+    {
+      "hourAvg": 0,
+      "aqi": 0
+    },
+    {
+      "hourAvg": 160,
+      "aqi": 50
+    },
+    {
+      "hourAvg": 200,
+      "aqi": 100
+    },
+    {
+      "hourAvg": 300,
+      "aqi": 150
+    },
+    {
+      "hourAvg": 400,
+      "aqi": 200
+    },
+    {
+      "hourAvg": 800,
+      "aqi": 300
+    },
+    {
+      "hourAvg": 1000,
+      "aqi": 400
+    },
+    {
+      "hourAvg": 1200,
+      "aqi": 500
+    }
+  ],
+  "PM2.5": [
+    {
+      "hourAvg": 0,
+      "aqi": 0
+    },
+    {
+      "hourAvg": 35,
+      "aqi": 50
+    },
+    {
+      "hourAvg": 75,
+      "aqi": 100
+    },
+    {
+      "hourAvg": 115,
+      "aqi": 150
+    },
+    {
+      "hourAvg": 150,
+      "aqi": 200
+    },
+    {
+      "hourAvg": 250,
+      "aqi": 300
+    },
+    {
+      "hourAvg": 350,
+      "aqi": 400
+    },
+    {
+      "hourAvg": 500,
+      "aqi": 500
+    }
+  ]
+}
