@@ -88,6 +88,10 @@ public class ApiTool {
         double result = 0;
         String gasName = headerMap.get(index);
         JSONArray standardAqiArray = configManager.getConfig().getJSONArray(gasName);
+        if (null == standardAqiArray || standardAqiArray.isEmpty()) {
+            System.err.println(String.format("gasName=%s config is null or empty", gasName));
+            return result;
+        }
         for (int i = 0; i < standardAqiArray.size(); i++) {
             JSONObject standardIndex = (JSONObject) standardAqiArray.get(i);
             double hourAvg = standardIndex.getDoubleValue("hourAvg");
