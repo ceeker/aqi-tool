@@ -18,7 +18,7 @@ public class ApiTool {
 
     public void read() {
         String filePath = ApiTool.class.getClassLoader().getResource("data/today.xlsx").getFile();
-        try(Workbook workbook = WorkbookFactory.create(new File(filePath));) {
+        try (Workbook workbook = WorkbookFactory.create(new File(filePath));) {
             //工作表对象
             Sheet sheet = workbook.getSheetAt(0);
             //总行数
@@ -30,29 +30,40 @@ public class ApiTool {
             //得到指定的单元格
             Row row = null;
             Cell cell = null;
-            for (int i = 1; i < rowLength; i++) {
-                row = sheet.getRow(i);
-                for (int j = 5; j < colLength; j++) {
-                    cell = row.getCell(j);
+            for (int rowIndex = 1; rowIndex < rowLength; rowIndex++) {
+                row = sheet.getRow(rowIndex);
+                double maxAqi = 0;
+                String maxAqiAirName = "";
+                for (int cowIndex = 5; cowIndex < colLength; cowIndex++) {
+                    cell = row.getCell(cowIndex);
                     try {
                         cell.setCellType(CellType.STRING);
                         if (cell != null) {
                             String cellValueStr = cell.getStringCellValue();
                             double cellValue = 0;
                             if (!NumberUtils.isNumber(cellValueStr)) {
-                                System.out.println(String.format("current row=%s,cow=%s,value=%s", i, j, cellValue));
+                                System.out.println(String.format("current row=%s,cow=%s,value=%s", rowIndex, cowIndex, cellValue));
                             } else {
                                 cellValue = Double.parseDouble(cellValueStr);
                             }
-                            int index = j + 8;
+                            int index = cowIndex + 8;
                             Cell newCell = row.createCell(index, CellType.NUMERIC);
-                            double handleData = handleData(j, cellValue);
-                            newCell.setCellValue(handleData);
+                            double api = handleData(cowIndex, cellValue);
+                            if (api > maxAqi) {
+                                maxAqi = api;
+                                maxAqiAirName = headerMap.get(cowIndex);
+                            }
+                            newCell.setCellValue(api);
                         }
                     } catch (Exception e) {
-                        System.out.println(String.format("current row=%s,cow=%s", i, j));
+                        System.out.println(String.format("current row=%s,cow=%s", rowIndex, cowIndex));
                         e.printStackTrace();
                     }
+                    Cell maxAqiCell = row.createCell(colLength + 8 + 1, CellType.NUMERIC);
+                    maxAqiCell.setCellValue(maxAqi);
+
+                    Cell maxAqiAirNameCell = row.createCell(colLength + 8 + 2, CellType.STRING);
+                    maxAqiAirNameCell.setCellValue(maxAqiAirName);
                 }
             }
             //将修改好的数据保存

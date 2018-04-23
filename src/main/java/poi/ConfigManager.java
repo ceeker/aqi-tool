@@ -17,7 +17,7 @@ import java.io.IOException;
 @Data
 public class ConfigManager{
     private JSONObject config = null;
-    public static final String CONFIG_PATH = "data/meta.json";
+    public static final String CONFIG_PATH = "config/meta.json";
 
     public ConfigManager() {
         loadConfig(CONFIG_PATH);
