@@ -1,5 +1,6 @@
 {
   "dataStartRow":1,
   "dataStartCol":5,
-  "appendToOriginalTable":true
+  "appendToOriginalTable":true,
+  "dataName":"today.xlsx"
 }

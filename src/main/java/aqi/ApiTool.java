@@ -1,4 +1,4 @@
-package poi;
+package aqi;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -17,7 +17,7 @@ public class ApiTool {
     public static ConfigManager configManager = new ConfigManager();
 
     public void read() {
-        String filePath = ApiTool.class.getClassLoader().getResource("data/today.xlsx").getFile();
+        String filePath = ApiTool.class.getClassLoader().getResource("data/2017ny.xlsx").getFile();
         try (Workbook workbook = WorkbookFactory.create(new File(filePath));) {
             //工作表对象
             Sheet sheet = workbook.getSheetAt(0);
@@ -32,13 +32,16 @@ public class ApiTool {
             Cell cell = null;
             for (int rowIndex = 1; rowIndex < rowLength; rowIndex++) {
                 row = sheet.getRow(rowIndex);
+                if (row == null) {
+                    continue;
+                }
                 double maxAqi = 0;
                 String maxAqiAirName = "";
                 for (int cowIndex = 5; cowIndex < colLength; cowIndex++) {
                     cell = row.getCell(cowIndex);
                     try {
-                        cell.setCellType(CellType.STRING);
                         if (cell != null) {
+                            cell.setCellType(CellType.STRING);
                             String cellValueStr = cell.getStringCellValue();
                             double cellValue = 0;
                             if (!NumberUtils.isNumber(cellValueStr)) {
@@ -48,12 +51,12 @@ public class ApiTool {
                             }
                             int index = cowIndex + 8;
                             Cell newCell = row.createCell(index, CellType.NUMERIC);
-                            double api = handleData(cowIndex, cellValue);
-                            if (api > maxAqi) {
-                                maxAqi = api;
+                            double aqi = handleData(cowIndex, cellValue);
+                            if (aqi > maxAqi) {
+                                maxAqi = aqi;
                                 maxAqiAirName = headerMap.get(cowIndex);
                             }
-                            newCell.setCellValue(api);
+                            newCell.setCellValue(aqi);
                         }
                     } catch (Exception e) {
                         System.out.println(String.format("current row=%s,cow=%s", rowIndex, cowIndex));
@@ -77,8 +80,20 @@ public class ApiTool {
     private void handlerHeader(Row header) {
         for (Cell cell : header) {
             headerMap.put(cell.getColumnIndex(), cell.getStringCellValue());
+//            addHeaderCol(header, cell);
         }
     }
+
+    private void addHeaderCol(Row header, Cell cell) {
+        int columnIndex = cell.getColumnIndex();
+        String cellValue = cell.getStringCellValue();
+        int aqiNameIndex = columnIndex + 8;
+        String aqiName = cellValue + "_AQI";
+        Cell apiNameHeaderCell = header.createCell(aqiNameIndex, CellType.STRING);
+        apiNameHeaderCell.setCellValue(aqiName);
+
+    }
+
 
     public static void main(String[] args) {
         new ApiTool().read();
@@ -113,6 +128,10 @@ public class ApiTool {
         double nextHourAvg = next.getDoubleValue("hourAvg");
         double nextAqi = next.getDoubleValue("aqi");
         return (nextAqi - previousAqi) / (nextHourAvg - previousHourAvg) * (currentData - previousHourAvg) + previousAqi;
+    }
+
+    private String getResultName(String sourceFileName) {
+        return "";
     }
 
 }

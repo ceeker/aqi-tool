@@ -13,9 +13,48 @@
             <name>zhangxiaoling</name>
             <email>409273291@qq.com</email>
         </developer>
+        <developer>
+            <name>guozhongjie</name>
+            <email>1119572863@qq.com</email>
+        </developer>
     </developers>
 
+    <properties>
+        <poi.version>3.17</poi.version>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.46</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.20</version>
+        </dependency>
         <!--https://github.com/alibaba/easyexcel-->
         <!--<dependency>-->
             <!--<groupId>com.alibaba</groupId>-->
@@ -23,38 +62,22 @@
             <!--<version>1.0.1</version>-->
         <!--</dependency>-->
         <!--https://github.com/alibaba/fastjson-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.46</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.6</version>
-        </dependency>
 
-
-        <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-base</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-web</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-annotation</artifactId>
-            <version>3.1.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>cn.afterturn</groupId>-->
+            <!--<artifactId>easypoi-base</artifactId>-->
+            <!--<version>3.1.0</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>cn.afterturn</groupId>-->
+            <!--<artifactId>easypoi-web</artifactId>-->
+            <!--<version>3.1.0</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>cn.afterturn</groupId>-->
+            <!--<artifactId>easypoi-annotation</artifactId>-->
+            <!--<version>3.1.0</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
