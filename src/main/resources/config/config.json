@@ -2,7 +2,8 @@
   "dataStartRow":1,
   "dataStartCol":5,
   "appendToOriginalTable":true,
-  "dataPath":"today.xlsx",
-  "aqiConfig":"aqi_config_daily.json",
-  "result_file_prefix":"result_"
+  "dataPath":"data",
+  "aqiConfig":"config/aqi_config_daily.json",
+  "result_file_prefix":"result_",
+  "result_col_offset":8
 }
