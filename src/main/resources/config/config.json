@@ -3,5 +3,6 @@
   "dataStartCol":5,
   "appendToOriginalTable":true,
   "dataPath":"today.xlsx",
-  "aqiConfig":"daily_aqi.json"
+  "aqiConfig":"aqi_config_daily.json",
+  "result_file_prefix":"result_"
 }

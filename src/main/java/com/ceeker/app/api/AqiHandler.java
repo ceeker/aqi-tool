@@ -2,6 +2,7 @@ package com.ceeker.app.api;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -13,22 +14,26 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
 @Singleton
 public class AqiHandler {
-    private final static Map<Integer, String> HEADER_MAP = new HashMap<>();
     @Inject
-    private ConfigManager configManager = new ConfigManager();
+    private ConfigManager configManager;
     private static final String FILE_NAME = "2017南油日均值.xls";
     //数据开始的行下标
-    private static final int START_ROW = 1;
+    private final int START_ROW;
     //数据开始的列下标
-    private static final int START_COL = 2;
+    private int START_COL;
     //计算结果列下标的偏移量
     private static final int RESULT_COL_OFFSET = 8;
+    private final static Map<Integer, String> HEADER_MAP = Maps.newHashMap();
+
+    public AqiHandler() {
+        START_ROW = configManager.getConfig(Consts.DATA_START_ROW);
+        START_COL = configManager.getConfig(Consts.DATA_START_COL);
+    }
 
     /**
      * 计算api
@@ -145,9 +150,9 @@ public class AqiHandler {
 
     private double calculateAqi(JSONObject previous, JSONObject next, double currentData) {
         double previousHourAvg = previous.getDoubleValue("hourAvg");
-        double previousAqi = previous.getDoubleValue("com/ceeker/app/api");
+        double previousAqi = previous.getDoubleValue("aqi");
         double nextHourAvg = next.getDoubleValue("hourAvg");
-        double nextAqi = next.getDoubleValue("com/ceeker/app/api");
+        double nextAqi = next.getDoubleValue("aqi");
         return (nextAqi - previousAqi) / (nextHourAvg - previousHourAvg) * (currentData - previousHourAvg) + previousAqi;
     }
 

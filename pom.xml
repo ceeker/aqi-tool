@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.zxl.app</groupId>
-    <artifactId>aqi-tool</artifactId>
+    <artifactId>aqi-calculator</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <description>空气质量指数(AQI)计算工具</description>
     <developers>

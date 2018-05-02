@@ -22,11 +22,9 @@ import java.nio.charset.StandardCharsets;
 @Singleton
 public class ConfigManager {
     private final JSONObject config;
-    private static final String CONFIG_PATH = "config/daily_aqi.json";
-    private static final String API_CONFIG_KEY = "aqiConfig";
 
-    ConfigManager() {
-        config = loadConfig(CONFIG_PATH);
+    protected ConfigManager() {
+        config = loadConfig(Consts.CONFIG_FILE);
         log.debug("load config={}", config);
     }
 
@@ -37,7 +35,7 @@ public class ConfigManager {
             String configJson = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             config = JSON.parseObject(configJson);
             String aqiConfigJson = FileUtils.readFileToString(getFile(config.getString("aqiConfig")), StandardCharsets.UTF_8);
-            config.put(API_CONFIG_KEY, JSON.parseObject(aqiConfigJson));
+            config.put(Consts.API_CONFIG_KEY, JSON.parseObject(aqiConfigJson));
         } catch (IOException e) {
             log.error("loadConfig error,configPath=" + file, e);
         }
@@ -50,7 +48,11 @@ public class ConfigManager {
     }
 
     public JSONObject getAqiConfig() {
-        return config.getJSONObject(API_CONFIG_KEY);
+        return config.getJSONObject(Consts.API_CONFIG_KEY);
+    }
+
+    public <T> T getConfig(String key) {
+        return (T) config.get(key);
     }
 
 }
