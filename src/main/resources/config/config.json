@@ -1,6 +1,6 @@
 {
   "dataStartRow":1,
-  "dataStartCol":5,
+  "dataStartCol":2,
   "appendToOriginalTable":true,
   "dataPath":"data",
   "aqiConfig":"config/aqi_config_daily.json",

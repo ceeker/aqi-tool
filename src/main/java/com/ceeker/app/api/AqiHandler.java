@@ -20,15 +20,29 @@ import java.util.Map;
 @Slf4j
 @Singleton
 public class AqiHandler {
-    //数据开始的行下标
+    /**
+     * 数据开始的行下标
+     */
     private final int START_ROW;
-    //数据开始的列下标
+    /**
+     * 数据开始的列下标
+     */
     private final int START_COL;
-    //计算结果列下标的偏移量
+    /**
+     * 计算结果列下标的偏移量
+     */
     private final int RESULT_COL_OFFSET;
+    /**
+     * 配置管理器
+     */
     private ConfigManager configManager;
-    private final String DATA_FILES = "2017南油日均值.xls";
+    /**
+     * 要计算AQI的数据文件
+     */
     private Collection<File> dataFiles;
+    /**
+     * 数据文件表头 key:col_index;value:col_value
+     */
     private final static Map<Integer, String> HEADER_MAP = Maps.newHashMap();
 
     @Inject
@@ -41,19 +55,18 @@ public class AqiHandler {
     }
 
     /**
-     * 计算api
+     * 处理数据文件
      */
-    public void calculateAqi() {
+    public void handleDataFiles() {
         if (CollectionUtils.isEmpty(dataFiles)) {
-            log.warn("dataFiles is empty,cancel calculateAqi!");
+            log.warn("dataFiles is empty,cancel handleDataFiles!");
             return;
         }
-        log.info("---------- start calculateAqi,{} files had be found---------", dataFiles.size());
+        log.info("---------- start handleDataFiles,{} files had be found---------", dataFiles.size());
         for (File dataFile : dataFiles) {
-//            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("data/" + DATA_FILES);
             //会把文件名中的中文进行urlencode
+//            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("data/" + DATA_FILES);
 //        String filePath = this.getClass().getClassLoader().getResource("data/" + Data_fils).getFile();
-//            Workbook workbook = WorkbookFactory.create(inputStream)
             try (Workbook workbook = WorkbookFactory.create(dataFile)) {
                 //工作表对象
                 Sheet sheet = workbook.getSheetAt(0);
@@ -88,7 +101,7 @@ public class AqiHandler {
                                 }
                                 int index = cowIndex + RESULT_COL_OFFSET;
                                 Cell newCell = row.createCell(index, CellType.NUMERIC);
-                                double aqi = handleData(cowIndex, cellValue);
+                                double aqi = calculateAqi(cowIndex, cellValue);
                                 if (aqi > maxAqi) {
                                     maxAqi = aqi;
                                     maxAqiAirName = HEADER_MAP.get(cowIndex);
@@ -96,10 +109,9 @@ public class AqiHandler {
                                 newCell.setCellValue(aqi);
                             }
                         } catch (Exception e) {
-                            System.out.println(String.format("current row=%s,cow=%s", rowIndex, cowIndex));
-                            e.printStackTrace();
+                            log.error(String.format("error,current row=%s,cow=%s", rowIndex, cowIndex), e);
                         }
-                        //QAI结果
+                        //AQI结果
                         Cell aqiCell = row.createCell(colLength + RESULT_COL_OFFSET + 1, CellType.NUMERIC);
                         aqiCell.setCellValue(maxAqi);
                         //首要污染物
@@ -108,12 +120,13 @@ public class AqiHandler {
                     }
                 }
                 //将修改好的数据保存
-                OutputStream out = new FileOutputStream(getResultFile(DATA_FILES));
+                OutputStream out = new FileOutputStream(getResultFile(dataFile.getName()));
                 workbook.write(out);
             } catch (Exception e) {
-                log.error("error", e);
+                log.error("handleDataFiles error,file=" + dataFile, e);
             }
         }
+        log.info("handleDataFiles finsh");
     }
 
     private void handleHeader(Row header) {
@@ -122,11 +135,11 @@ public class AqiHandler {
         for (int cowIndex = START_COL; cowIndex < colLength; cowIndex++) {
             Cell cell = header.getCell(cowIndex);
             HEADER_MAP.put(cell.getColumnIndex(), cell.getStringCellValue());
-            addHeaderCol(header, cell);
+            addAqiHeaderCol(header, cell);
         }
     }
 
-    private void addHeaderCol(Row header, Cell cell) {
+    private void addAqiHeaderCol(Row header, Cell cell) {
         int columnIndex = cell.getColumnIndex();
         String cellValue = cell.getStringCellValue();
         if (StringUtils.isNotBlank(cellValue)) {
@@ -135,15 +148,21 @@ public class AqiHandler {
             Cell apiNameHeaderCell = header.createCell(aqiNameIndex, CellType.STRING);
             apiNameHeaderCell.setCellValue(aqiName);
         }
-
     }
 
-    private double handleData(int index, double data) {
+    /**
+     * 计算api
+     *
+     * @param index
+     * @param data
+     * @return
+     */
+    private double calculateAqi(int index, double data) {
         double result = 0;
         String gasName = HEADER_MAP.get(index);
         JSONArray standardAqiArray = configManager.getAqiConfig().getJSONArray(gasName);
         if (null == standardAqiArray || standardAqiArray.isEmpty()) {
-            System.err.println(String.format("gasName=%s config is null or empty", gasName));
+            log.warn("-------gasName={} config is null or empty--------", gasName);
             return result;
         }
         for (int i = 0; i < standardAqiArray.size(); i++) {
@@ -169,8 +188,8 @@ public class AqiHandler {
         return (nextAqi - previousAqi) / (nextHourAvg - previousHourAvg) * (currentData - previousHourAvg) + previousAqi;
     }
 
-    private File getResultFile(String sourceFile) {
-        return new File("result/result_" + sourceFile);
+    private File getResultFile(String originalFileName) {
+        return new File("result/result_" + originalFileName);
     }
 
 }

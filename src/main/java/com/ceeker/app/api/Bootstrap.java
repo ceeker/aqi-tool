@@ -18,7 +18,7 @@ public class Bootstrap {
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(new MyModule());
         AqiHandler aqiHandler = injector.getInstance(AqiHandler.class);
-        aqiHandler.calculateAqi();
+        aqiHandler.handleDataFiles();
     }
 }
 
