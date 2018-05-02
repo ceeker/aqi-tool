@@ -36,7 +36,7 @@ public class ConfigManager {
         JSONObject config = null;
         try {
             config = JSON.parseObject(FileUtils.readFileToString(file, StandardCharsets.UTF_8));
-            String aqiConfigJson = FileUtils.readFileToString(getFile(config.getString("aqiConfig")), StandardCharsets.UTF_8);
+            String aqiConfigJson = FileUtils.readFileToString(getFile(config.getString(Consts.API_CONFIG_KEY)), StandardCharsets.UTF_8);
             config.put(Consts.API_CONFIG_KEY, JSON.parseObject(aqiConfigJson));
             String dataPath = config.getString(Consts.DATA_PATH);
             dataFiles = getDataFiles(dataPath);
@@ -68,5 +68,7 @@ public class ConfigManager {
     public <T> T getConfig(String key) {
         return (T) config.get(key);
     }
+
+
 
 }
