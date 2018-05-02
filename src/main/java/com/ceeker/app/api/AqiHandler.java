@@ -145,8 +145,8 @@ public class AqiHandler {
         if (StringUtils.isNotBlank(cellValue)) {
             int aqiNameIndex = columnIndex + RESULT_COL_OFFSET;
             String aqiName = "AQI_" + cellValue;
-            Cell apiNameHeaderCell = header.createCell(aqiNameIndex, CellType.STRING);
-            apiNameHeaderCell.setCellValue(aqiName);
+            Cell aqiNameHeaderCell = header.createCell(aqiNameIndex, CellType.STRING);
+            aqiNameHeaderCell.setCellValue(aqiName);
         }
     }
 
@@ -189,7 +189,7 @@ public class AqiHandler {
     }
 
     private File getResultFile(String originalFileName) {
-        return new File("result/result_" + originalFileName);
+        return new File("result/" + configManager.getConfig(Consts.RESULT_FILE_PREFIX) + originalFileName);
     }
 
 }
