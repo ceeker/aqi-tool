@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @Singleton
 public class ConfigManager {
+
     private final JSONObject config;
 
     protected ConfigManager() {
