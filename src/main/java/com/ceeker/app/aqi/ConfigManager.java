@@ -1,4 +1,4 @@
-package com.ceeker.app.api;
+package com.ceeker.app.aqi;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

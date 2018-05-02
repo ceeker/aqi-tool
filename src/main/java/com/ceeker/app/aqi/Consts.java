@@ -1,4 +1,4 @@
-package com.ceeker.app.api;
+package com.ceeker.app.aqi;
 
 /**
  * @author vectorzhang

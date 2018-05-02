@@ -1,4 +1,4 @@
-package com.ceeker.app.api;
+package com.ceeker.app.aqi;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -87,29 +87,29 @@ public class AqiHandler {
                     }
                     double maxAqi = 0;
                     String maxAqiAirName = "";
-                    for (int cowIndex = START_COL; cowIndex < colLength; cowIndex++) {
-                        cell = row.getCell(cowIndex);
+                    for (int colIndex = START_COL; colIndex < colLength; colIndex++) {
+                        cell = row.getCell(colIndex);
                         try {
                             if (cell != null) {
                                 cell.setCellType(CellType.STRING);
                                 String cellValueStr = cell.getStringCellValue();
                                 double cellValue = 0;
                                 if (!NumberUtils.isCreatable(cellValueStr)) {
-                                    System.out.println(String.format("current row=%s,cow=%s,value=%s", rowIndex, cowIndex, cellValue));
-                                } else {
-                                    cellValue = Double.parseDouble(cellValueStr);
+                                    log.warn("is not number,row={},cow={},value={}", rowIndex, colIndex, cellValue);
+                                    continue;
                                 }
-                                int index = cowIndex + RESULT_COL_OFFSET;
-                                Cell newCell = row.createCell(index, CellType.NUMERIC);
-                                double aqi = calculateAqi(cowIndex, cellValue);
+                                cellValue = Double.parseDouble(cellValueStr);
+                                int resultColindex = colIndex + RESULT_COL_OFFSET;
+                                Cell aqiCell = row.createCell(resultColindex, CellType.NUMERIC);
+                                double aqi = calculateAqi(colIndex, cellValue);
                                 if (aqi > maxAqi) {
                                     maxAqi = aqi;
-                                    maxAqiAirName = HEADER_MAP.get(cowIndex);
+                                    maxAqiAirName = HEADER_MAP.get(colIndex);
                                 }
-                                newCell.setCellValue(aqi);
+                                aqiCell.setCellValue(aqi);
                             }
                         } catch (Exception e) {
-                            log.error(String.format("error,current row=%s,cow=%s", rowIndex, cowIndex), e);
+                            log.error(String.format("error,current row=%s,cow=%s", rowIndex, colIndex), e);
                         }
                         //AQI结果
                         Cell aqiCell = row.createCell(colLength + RESULT_COL_OFFSET + 1, CellType.NUMERIC);
