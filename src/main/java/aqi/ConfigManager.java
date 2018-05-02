@@ -19,7 +19,7 @@ import java.io.IOException;
 @Slf4j
 public class ConfigManager{
     private JSONObject config = null;
-    public static final String CONFIG_PATH = "config/meta.json";
+    public static final String CONFIG_PATH = "config/daily_aqi.json";
 
     public ConfigManager() {
         loadConfig(CONFIG_PATH);
