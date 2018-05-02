@@ -9,21 +9,22 @@ import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
 public class ApiTool {
-    private final static Map<Integer, String> HEADER_MAP = new HashMap<Integer, String>();
-    public static ConfigManager configManager = new ConfigManager();
-    public static final String FILE_NAME = "2015_hqc_daily.xls";
+    private final static Map<Integer, String> HEADER_MAP = new HashMap<>();
+    private static ConfigManager configManager = new ConfigManager();
+    private static final String FILE_NAME = "2017南油日均值.xls";
     //数据开始的行下标
-    public static final int START_ROW = 1;
+    private static final int START_ROW = 1;
     //数据开始的列下标
-    public static final int START_COL = 2;
+    private static final int START_COL = 2;
     //计算结果列下标的偏移量
-    public static final int RESULT_COL_OFFSET = 8;
+    private static final int RESULT_COL_OFFSET = 8;
 
     public static void main(String[] args) {
         new ApiTool().calculateAqi();
@@ -32,9 +33,10 @@ public class ApiTool {
     /**
      * 计算api
      */
-    public void calculateAqi() {
-        String filePath = ApiTool.class.getClassLoader().getResource("data/" + FILE_NAME).getFile();
-        try (Workbook workbook = WorkbookFactory.create(new File(filePath))) {
+    private void calculateAqi() {
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("data/" + FILE_NAME);
+//        String filePath = this.getClass().getClassLoader().getResource("data/" + FILE_NAME).getFile();
+        try (Workbook workbook = WorkbookFactory.create(inputStream)) {
             //工作表对象
             Sheet sheet = workbook.getSheetAt(0);
             //总行数
@@ -44,9 +46,9 @@ public class ApiTool {
             int colLength = header.getLastCellNum();
             handleHeader(header);
             //得到指定的行
-            Row row = null;
+            Row row;
             //得到指定的单元格
-            Cell cell = null;
+            Cell cell;
             for (int rowIndex = START_ROW; rowIndex < rowLength; rowIndex++) {
                 row = sheet.getRow(rowIndex);
                 if (row == null) {
@@ -91,7 +93,7 @@ public class ApiTool {
             OutputStream out = new FileOutputStream(getResultFile(FILE_NAME));
             workbook.write(out);
         } catch (Exception e) {
-            log.error("");
+            log.error("error", e);
         }
     }
 
@@ -117,7 +119,7 @@ public class ApiTool {
 
     }
 
-    public double handleData(int index, double data) {
+    private double handleData(int index, double data) {
         double result = 0;
         String gasName = HEADER_MAP.get(index);
         JSONArray standardAqiArray = configManager.getConfig().getJSONArray(gasName);
