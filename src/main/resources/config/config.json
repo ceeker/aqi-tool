@@ -2,5 +2,6 @@
   "dataStartRow":1,
   "dataStartCol":5,
   "appendToOriginalTable":true,
-  "dataName":"today.xlsx"
+  "dataPath":"today.xlsx",
+  "aqiConfig":"daily_aqi.json"
 }

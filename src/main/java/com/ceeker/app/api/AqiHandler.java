@@ -1,4 +1,4 @@
-package aqi;
+package com.ceeker.app.api;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.*;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -15,9 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-public class ApiTool {
+@Singleton
+public class AqiHandler {
     private final static Map<Integer, String> HEADER_MAP = new HashMap<>();
-    private static ConfigManager configManager = new ConfigManager();
+    @Inject
+    private ConfigManager configManager = new ConfigManager();
     private static final String FILE_NAME = "2017南油日均值.xls";
     //数据开始的行下标
     private static final int START_ROW = 1;
@@ -26,15 +30,12 @@ public class ApiTool {
     //计算结果列下标的偏移量
     private static final int RESULT_COL_OFFSET = 8;
 
-    public static void main(String[] args) {
-        new ApiTool().calculateAqi();
-    }
-
     /**
      * 计算api
      */
-    private void calculateAqi() {
+    public void calculateAqi() {
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("data/" + FILE_NAME);
+        //会把文件名中的中文进行urlencode
 //        String filePath = this.getClass().getClassLoader().getResource("data/" + FILE_NAME).getFile();
         try (Workbook workbook = WorkbookFactory.create(inputStream)) {
             //工作表对象
@@ -122,7 +123,7 @@ public class ApiTool {
     private double handleData(int index, double data) {
         double result = 0;
         String gasName = HEADER_MAP.get(index);
-        JSONArray standardAqiArray = configManager.getConfig().getJSONArray(gasName);
+        JSONArray standardAqiArray = configManager.getAqiConfig().getJSONArray(gasName);
         if (null == standardAqiArray || standardAqiArray.isEmpty()) {
             System.err.println(String.format("gasName=%s config is null or empty", gasName));
             return result;
@@ -144,9 +145,9 @@ public class ApiTool {
 
     private double calculateAqi(JSONObject previous, JSONObject next, double currentData) {
         double previousHourAvg = previous.getDoubleValue("hourAvg");
-        double previousAqi = previous.getDoubleValue("aqi");
+        double previousAqi = previous.getDoubleValue("com/ceeker/app/api");
         double nextHourAvg = next.getDoubleValue("hourAvg");
-        double nextAqi = next.getDoubleValue("aqi");
+        double nextAqi = next.getDoubleValue("com/ceeker/app/api");
         return (nextAqi - previousAqi) / (nextHourAvg - previousHourAvg) * (currentData - previousHourAvg) + previousAqi;
     }
 

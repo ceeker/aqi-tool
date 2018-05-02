@@ -1,4 +1,4 @@
-package aqi;
+package com.ceeker.app.api;
 
 import java.util.List;
 
