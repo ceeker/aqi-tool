@@ -102,11 +102,11 @@ public class AqiHandler {
                                 int resultColindex = colIndex + RESULT_COL_OFFSET;
                                 Cell aqiCell = row.createCell(resultColindex, CellType.NUMERIC);
                                 double aqi = calculateAqi(colIndex, cellValue);
+                                aqiCell.setCellValue(aqi);
                                 if (aqi > maxAqi) {
                                     maxAqi = aqi;
                                     maxAqiAirName = HEADER_MAP.get(colIndex);
                                 }
-                                aqiCell.setCellValue(aqi);
                             }
                         } catch (Exception e) {
                             log.error(String.format("error,current row=%s,cow=%s", rowIndex, colIndex), e);
