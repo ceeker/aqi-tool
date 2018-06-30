@@ -33,7 +33,7 @@ public class ConfigManager{
             aqiStandardConfig = FileUtils.readFileToString(new File(file), "utf-8");
             this.config = JSON.parseObject(aqiStandardConfig);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("load config error,file=" + file, e);
         }
     }
 
